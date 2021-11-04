@@ -50,7 +50,15 @@ class Viking extends Soldier {
 }
 
 // Saxon
-class Saxon {}
+class Saxon extends Soldier {
+  // Para este caso no es necesario sobreescribir el resto de métodos, ni siquiera el constructor.
+  receiveDamage(damage) {
+    super.receiveDamage(damage);
+    return this.isAlive()
+      ? `A Saxon has received ${damage} points of damage`
+      : `A Saxon has died in combat`;
+  }
+}
 
 // War
 class War {}
