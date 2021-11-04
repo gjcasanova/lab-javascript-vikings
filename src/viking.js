@@ -61,7 +61,72 @@ class Saxon extends Soldier {
 }
 
 // War
-class War {}
+class War {
+  constructor() {
+    // Inicializa los arrays para ambos bandos.
+    this.vikingArmy = [];
+    this.saxonArmy = [];
+  }
+
+  addViking(viking) {
+    // Agrega un elemento al bando vikingo.
+    this.vikingArmy.push(viking);
+  }
+
+  addSaxon(saxon) {
+    // Agrega un elemento al bando sajón.
+    this.saxonArmy.push(saxon);
+  }
+
+  attack(vikingIdx, saxonIdx, whoAttack) {
+    // Este método abstrae un ataque sin importar el bando atacante ni el atacado.
+    // Si whoAttack es true se entiende que el bando atacante es el vikingo,
+    // pero si es false se entiende que es el sajón.
+
+    let viking = this.vikingArmy[vikingIdx];
+    let saxon = this.saxonArmy[saxonIdx];
+    let victim, attacker, victimArmy, victimIdx;
+
+    if (whoAttack) {
+      victimIdx = saxonIdx;
+      victim = saxon;
+      victimArmy = this.saxonArmy;
+      attacker = viking;
+    } else {
+      victimIdx = vikingIdx;
+      victim = viking;
+      victimArmy = this.vikingArmy;
+      attacker = saxon;
+    }
+
+    let result = victim.receiveDamage(attacker.attack());
+    if (!victim.isAlive()) {
+      // ELimina el soldado muerto del bando atacado.
+      victimArmy.splice(victimIdx, 1);
+    }
+
+    return result;
+  }
+
+  vikingAttack() {
+    const [vikingIdx, saxonIdx] = this.selectPairIdx();
+    return this.attack(vikingIdx, saxonIdx, true);
+  }
+
+  saxonAttack() {
+    const [vikingIdx, saxonIdx] = this.selectPairIdx();
+    return this.attack(vikingIdx, saxonIdx, false);
+  }
+
+  selectPairIdx() {
+    // Este es un método auxiliar que permite obtener un índice random de cada bando.
+    let vikingIdx = Math.floor(Math.random() * this.vikingArmy.length);
+    let saxonIdx = Math.floor(Math.random() * this.saxonArmy.length);
+    return [vikingIdx, saxonIdx];
+  }
+
+  showStatus() {}
+}
 
 // The following is required to make unit tests work.
 /* Environment setup. Do not modify the below code. */
